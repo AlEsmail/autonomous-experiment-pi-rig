@@ -4,8 +4,8 @@ One-time setup on the Pi:
 
 ```bash
 cd ~
-git clone https://github.com/AlEsmail/<public-repo-name>.git   # public: no authentication needed
-cd pantone-rig
+git clone https://github.com/AlEsmail/autonomous-experiment-pi-rig.git   # public: no authentication needed
+cd autonomous-experiment-pi-rig
 python3 -m venv --system-site-packages .venv            # system site gives gpiozero + lgpio from Pi OS
 .venv/bin/pip install fastapi uvicorn httpx pytest anthropic
 sudo cp deploy/rig-service.service /etc/systemd/system/
@@ -23,7 +23,7 @@ sudo systemctl enable --now scientist
 Each deploy:
 
 ```bash
-cd ~/pantone-rig && git pull && sudo systemctl restart rig-service
+cd ~/autonomous-experiment-pi-rig && git pull && sudo systemctl restart rig-service
 ```
 
 Close any open `/wall` or `/operate` tabs before a restart or stop. An open MJPEG stream

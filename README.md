@@ -1,4 +1,4 @@
-# pantone-rig
+# autonomous-experiment-pi-rig
 
 Control software for a colour-mixing rig that uses a large language model as its optimiser. Given a target colour, the rig doses two dyes into a cup of water, photographs it, measures the colour in CIELAB, and asks the model for the next pair of doses. The objective is to match the target with as little dye as possible: `score = ΔE(measured, target) + λ · ml dye`, lower is better. Built in July 2026 as a class project (Stochastic Studio).
 

@@ -1,5 +1,5 @@
 [project]
-name = "pantone-rig"
+name = "autonomous-experiment-pi-rig"
 version = "0.1.0"
 description = "Control software for the Stochastic Studio color-mixing optimisation rig"
 requires-python = ">=3.11"

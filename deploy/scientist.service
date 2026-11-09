@@ -2,17 +2,17 @@
 # ABOUTME: then sudo systemctl daemon-reload && sudo systemctl enable --now scientist.
 
 [Unit]
-Description=Pantone rig scientist service
+Description=Autonomous experiment rig scientist service
 After=network-online.target rig-service.service
 Wants=network-online.target
 
 [Service]
 User=<user>
-WorkingDirectory=/home/<user>/pantone-rig
-Environment=PYTHONPATH=/home/<user>/pantone-rig/src
+WorkingDirectory=/home/<user>/autonomous-experiment-pi-rig
+Environment=PYTHONPATH=/home/<user>/autonomous-experiment-pi-rig/src
 Environment=PYTHONUNBUFFERED=1
-EnvironmentFile=-/home/<user>/pantone-rig/deploy/scientist.env
-ExecStart=/home/<user>/pantone-rig/.venv/bin/python -m scientist
+EnvironmentFile=-/home/<user>/autonomous-experiment-pi-rig/deploy/scientist.env
+ExecStart=/home/<user>/autonomous-experiment-pi-rig/.venv/bin/python -m scientist
 Restart=on-failure
 RestartSec=3
 

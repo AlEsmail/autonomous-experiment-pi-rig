@@ -1,4 +1,4 @@
-# Pantone Rig Control Software
+# Autonomous Experiment Pi Rig: Control Software
 
 _Spec agreed 2026-07-13 (brainstorm + Opus 4.8 fresh-eyes review). Implementation and tests
 derive from this document; the spec does not document the implementation after the fact.

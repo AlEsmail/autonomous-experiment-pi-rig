@@ -2,16 +2,16 @@
 # ABOUTME: then sudo systemctl daemon-reload && sudo systemctl enable --now rig-service.
 
 [Unit]
-Description=Pantone rig control service
+Description=Autonomous experiment rig control service
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 User=<user>
-WorkingDirectory=/home/<user>/pantone-rig
-Environment=PYTHONPATH=/home/<user>/pantone-rig/src
+WorkingDirectory=/home/<user>/autonomous-experiment-pi-rig
+Environment=PYTHONPATH=/home/<user>/autonomous-experiment-pi-rig/src
 Environment=PYTHONUNBUFFERED=1
-ExecStart=/home/<user>/pantone-rig/.venv/bin/python -m rig_service
+ExecStart=/home/<user>/autonomous-experiment-pi-rig/.venv/bin/python -m rig_service
 Restart=on-failure
 RestartSec=3
 
