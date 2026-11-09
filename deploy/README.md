@@ -4,7 +4,7 @@ One-time setup on the Pi:
 
 ```bash
 cd ~
-git clone https://github.com/<github-user>/pantone-rig.git   # private: authenticate with gh or a PAT
+git clone https://github.com/AlEsmail/<public-repo-name>.git   # public: no authentication needed
 cd pantone-rig
 python3 -m venv --system-site-packages .venv            # system site gives gpiozero + lgpio from Pi OS
 .venv/bin/pip install fastapi uvicorn httpx pytest anthropic

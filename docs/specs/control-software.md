@@ -2,9 +2,8 @@
 
 _Spec agreed 2026-07-13 (brainstorm + Opus 4.8 fresh-eyes review). Implementation and tests
 derive from this document; the spec does not document the implementation after the fact.
-Format adapted from <name>'s `/spec` skill. Design narrative: vault →
-`VSD/Stochastic Studio/Nodes/Control System.md`. **Code freeze: Sunday 2026-07-26 19:00 UK**
-(<author> flies to London Monday 07-27); **demo: Wednesday 2026-07-29**, 3-hour science-fair
+Design notes and the build log are kept privately. **Code freeze: Sunday 2026-07-26 19:00 UK**
+(Al flies to London); **demo: Wednesday 2026-07-29**, 3-hour science-fair
 display, rig in Prague, operator in London. The 07-27/28 gap is for remote rehearsal runs
 from London — everything must work without hands on the rig by freeze._
 
@@ -143,8 +142,8 @@ per-provider implementations: Anthropic (official `anthropic` SDK), Google Gemin
 (`google-genai`), Kimi/Moonshot. Every decision row records the model id. **Core scope
 builds the Anthropic adapter only**; Gemini/Kimi land after the 15-clean-cycles gate.
 
-Prompt *content* is deliberately out of scope here — it's the subject of the
-`Agentic AI Operation` node rewrite and gets exercised in the simulation harness.
+Prompt *content* is deliberately out of scope here — it's kept in the private
+design notes and gets exercised in the simulation harness.
 
 ## Simulation harness (de-risks the demo before the rig is wet)
 
@@ -257,8 +256,4 @@ continues in Prague, rejoin when back.
 
 ## Related
 
-- Design narrative: vault → `VSD/Stochastic Studio/Nodes/Control System.md`
-- Rig physical state (authoritative): vault → `VSD/Stochastic Studio/Build Log.md`
-- Project design authority: vault → `VSD/Stochastic Studio/Project Idea.md`
-- Objective/prompt design (pending): vault → `VSD/Stochastic Studio/Nodes/Agentic AI Operation.md`
-- Methodology source: vault → `Claude Infra/` (<name>'s verified-coding system)
+Design notes and the build log are kept privately.
