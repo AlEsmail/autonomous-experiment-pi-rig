@@ -3,7 +3,7 @@
 _Spec agreed 2026-07-13 (brainstorm + Opus 4.8 fresh-eyes review). Implementation and tests
 derive from this document; the spec does not document the implementation after the fact.
 Design notes and the build log are kept privately. **Code freeze: Sunday 2026-07-26 19:00 UK**
-(Al flies to London); **demo: Wednesday 2026-07-29**, 3-hour science-fair
+(AL flies to London); **demo: Wednesday 2026-07-29**, 3-hour science-fair
 display, rig in Prague, operator in London. The 07-27/28 gap is for remote rehearsal runs
 from London — everything must work without hands on the rig by freeze._
 
