@@ -1,0 +1,51 @@
+{
+  "channels": {
+    "A": {"gpio": 4, "role": "dye", "rate_ml_per_s": 2.0, "lag_s": 1.5, "max_ml_per_dose": 10},
+    "B": {"gpio": 5, "role": "dye", "rate_ml_per_s": 1.67, "lag_s": 0.8, "max_ml_per_dose": 10},
+    "D": {"gpio": 6, "role": "drain", "rate_ml_per_s": 1.6, "lag_s": 0.0, "max_ml_per_dose": 150},
+    "W": {"gpio": 21, "role": "water", "rate_ml_per_s": 1.7, "lag_s": 1.18, "max_ml_per_dose": 150}
+  },
+  "caps": {"max_relay_on_s": 120},
+  "volumes": {
+    "cup_ceiling_ml": 75,
+    "reservoir_ml": 6000,
+    "waste_capacity_ml": 6000,
+    "low_margin_ml": 300
+  },
+  "camera": {
+    "device": "/dev/video0",
+    "width": 1920,
+    "height": 1080,
+    "patch_px": 200,
+    "patch_center": [0.5, 0.5],
+    "controls": {
+      "auto_exposure": 1,
+      "exposure_time_absolute": 250,
+      "gain": 32,
+      "white_balance_automatic": 0,
+      "white_balance_temperature": 4600,
+      "focus_automatic_continuous": 0,
+      "focus_absolute": 15,
+      "backlight_compensation": 0,
+      "power_line_frequency": 1
+    }
+  },
+  "cycle": {
+    "_note": "cycle volumes, settle_s, blank_drift_delta_e and phase budgets are pre-bring-up placeholders; on-rig bring-up replaces the budgets with measured phase timings + margin and settles the volumes against measured rinse efficacy. refill_ml + rinse_ml at 50+20 means 70 ml water drawn and 70 ml waste per cycle, under the spec's ~100 ml/cycle fair math: at reservoir_ml and waste_capacity_ml of 6000 the low-headroom trip fires around cycle 80, beyond the spec's 45-60. rinse_ml 20 is bench-verified sufficient (<author>, 2026-07-24). drain_ml 75 covers refill 50 + up to 20 ml dye with margin and empties the 20 ml rinse; keep drain_ml >= refill_ml + max dye and >= rinse_ml or the cup never bookkeeps to empty. cup_ceiling_ml is pinned at 75 because config validation requires drain_ml >= cup_ceiling_ml (a full drain must always empty a full cup); it still clears worst-case fill (refill 50 + dye 20 = 70) but leaves only 5 ml of headroom, so blips during settle are limited to that headroom. phase_budgets_s are per-phase watchdog abort timeouts (a phase that exceeds its budget aborts the cycle and trips to paused), NOT pump on-time cutoffs -- the pump on-time cap is caps.max_relay_on_s. TODO(bring-up): once the 50/20/75 volumes are final and real phase timings are measured on-rig, replace every phase_budgets_s entry with measured phase time + margin.",
+    "refill_ml": 50,
+    "rinse_ml": 20,
+    "drain_ml": 75,
+    "settle_s": 30,
+    "blank_drift_delta_e": 5.0,
+    "phase_budgets_s": {
+      "dose": 30,
+      "refill": 120,
+      "settle": 60,
+      "measure": 60,
+      "drain": 180,
+      "rinse": 120,
+      "blank": 60,
+      "final_drain": 180
+    }
+  }
+}

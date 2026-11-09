@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment / secrets
+.env
+.env.local
+deploy/scientist.env
+
+# Test / lint caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Agent artifacts
+scratchpads/
+.claude/settings.local.json
+
+# Rig data (lives on the Pi, backed up separately — never in git)
+data/
+*.sqlite
+*.sqlite3
+frames/
+
+# Hypothesis example database
+.hypothesis/

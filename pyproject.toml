@@ -1,0 +1,46 @@
+[project]
+name = "pantone-rig"
+version = "0.1.0"
+description = "Control software for the Stochastic Studio color-mixing optimisation rig"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "httpx",
+    "pillow",
+    "anthropic",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "hypothesis",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "slow: takes >5 seconds",
+    "integration: cross-component tests",
+    "acceptance: end-to-end/on-rig tests",
+]
+filterwarnings = [
+    # Third-party deprecation inside starlette's test client; not actionable from
+    # this codebase without swapping the HTTP client dependency.
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated:Warning",
+    # starlette.testclient.TestClient warns when per-request timeout= is passed;
+    # the pinned interface requires per-request timeouts, so this is unavoidable.
+    "ignore:You should not use the 'timeout' argument with the TestClient:starlette.testclient.StarletteDeprecationWarning",
+    # lgpio's swig bindings on Pi OS emit this at interpreter level.
+    "ignore:builtin type swigvarlink has no __module__ attribute:DeprecationWarning",
+    "ignore:builtin type SwigPyObject has no __module__ attribute:DeprecationWarning",
+    "ignore:builtin type SwigPyPacked has no __module__ attribute:DeprecationWarning",
+]

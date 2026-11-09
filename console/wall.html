@@ -1,0 +1,234 @@
+<!-- ABOUTME: /wall console view -- audience display: live video degrading to stills,
+     ABOUTME: target vs measured patch, score-vs-cycle chart, rationale ticker, phase. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>rig-service / wall</title>
+<link rel="stylesheet" href="/static/common.css">
+<style>
+  /* Wall-specific layout: large type and patches, legible at ~3 m on a 1280x720 display. */
+  body { padding: 0; }
+  .wall-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    /* fr rows, not auto: the chart is the headline element (spec) and must keep a
+       guaranteed share of height regardless of how tall the patches/phase content
+       happens to render -- auto tracks let those inflate and starve the chart row. */
+    grid-template-rows: 2fr 1fr 1fr 2fr;
+    gap: 16px;
+    height: 100vh;
+    padding: 16px;
+  }
+  .wall-video {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    min-height: 0;
+    position: relative;
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wall-video img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .video-mode {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #e6e9ef;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .wall-patches {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: center;
+    gap: 12px;
+  }
+  .patch-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .patch {
+    /* Capped by vh as well as column width: the row is height-limited, and
+       width-only sizing overflows it and clips the label on shorter displays. */
+    width: min(100%, 24vh);
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 2px solid #2c3346;
+    background: #000;
+  }
+  .patch-label {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+  .wall-phase {
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1d2330;
+    border: 1px solid #2c3346;
+    border-radius: 6px;
+  }
+  .phase-label {
+    font-size: 1.2rem;
+    color: #9fb0c9;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .phase-value {
+    font-size: 2.4rem;
+    font-weight: bold;
+  }
+  .wall-scientist {
+    grid-column: 2;
+    grid-row: 3;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1d2330;
+    border: 1px solid #2c3346;
+    border-radius: 6px;
+  }
+  .scientist-label {
+    font-size: 1.2rem;
+    color: #9fb0c9;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  /* Smaller than .phase-value so the longer status strings stay on one line. */
+  .scientist-value {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .scientist-detail {
+    font-size: 1.1rem;
+    color: #9fb0c9;
+  }
+  .scientist-good {
+    color: #7cc98a;
+  }
+  .scientist-warn {
+    color: #e0b356;
+  }
+  .scientist-muted {
+    color: #9fb0c9;
+  }
+  .wall-chart {
+    grid-column: 1;
+    grid-row: 4;
+    background: #1d2330;
+    border: 1px solid #2c3346;
+    border-radius: 6px;
+    padding: 8px;
+    min-height: 0;
+  }
+  .wall-chart svg {
+    width: 100%;
+    height: 100%;
+  }
+  .wall-ticker {
+    grid-column: 2;
+    grid-row: 4;
+    min-height: 0;
+    background: #1d2330;
+    border: 1px solid #2c3346;
+    border-radius: 6px;
+    padding: 12px;
+    overflow-y: auto;
+  }
+  .ticker-label {
+    font-size: 1.2rem;
+    color: #9fb0c9;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  #ticker-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  #ticker-list li {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    border-bottom: 1px solid #2c3346;
+    padding-bottom: 8px;
+  }
+  #ticker-list li .cycle-n {
+    color: #9fb0c9;
+    font-weight: bold;
+    margin-right: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wall-grid">
+
+  <section class="wall-video">
+    <img id="video" alt="live cup video">
+    <div class="video-mode" id="video-mode"></div>
+  </section>
+
+  <section class="wall-patches">
+    <div class="patch-block">
+      <div class="patch" id="target-patch"></div>
+      <div class="patch-label">target <span id="target-hex-label">--</span></div>
+    </div>
+    <div class="patch-block">
+      <div class="patch" id="measured-patch"></div>
+      <div class="patch-label">measured <span id="measured-hex-label">--</span></div>
+    </div>
+  </section>
+
+  <section class="wall-phase">
+    <div class="phase-label">phase</div>
+    <div class="phase-value" id="phase-value">--</div>
+  </section>
+
+  <section class="wall-scientist">
+    <div class="scientist-label">scientist</div>
+    <div class="scientist-value" id="scientist-value">--</div>
+    <div class="scientist-detail" id="scientist-detail"></div>
+  </section>
+
+  <section class="wall-chart">
+    <svg id="chart" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet"></svg>
+  </section>
+
+  <section class="wall-ticker">
+    <div class="ticker-label">AI rationale</div>
+    <ul id="ticker-list"></ul>
+  </section>
+
+</div>
+
+<script src="/static/common.js"></script>
+<script src="/static/wall.js"></script>
+</body>
+</html>

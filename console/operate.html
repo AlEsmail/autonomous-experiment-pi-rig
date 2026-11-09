@@ -1,0 +1,144 @@
+<!-- ABOUTME: /operate console view -- mode switch, run start/end, target + lambda,
+     ABOUTME: manual dosing, disruption panel, staging, calibrate, and the health strip. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>rig-service / operate</title>
+<link rel="stylesheet" href="/static/common.css">
+</head>
+<body>
+<h1>Operate</h1>
+
+<div class="grid">
+
+  <section class="panel" id="mode-panel">
+    <h2>Mode</h2>
+    <label>Mode
+      <select id="mode-select">
+        <option value="auto">auto</option>
+        <option value="manual">manual</option>
+        <option value="paused">paused</option>
+      </select>
+    </label>
+    <button id="mode-submit" type="button">Set mode</button>
+    <div class="result" id="mode-result"></div>
+    <div class="error" id="mode-error"></div>
+  </section>
+
+  <section class="panel" id="run-panel">
+    <h2>Run start / end</h2>
+    <label>Target hex <input id="run-target-hex" type="text" value="#3366cc"></label>
+    <label>Lambda <input id="run-lambda" type="number" step="0.01" value="0.1"></label>
+    <label>Cycle budget <input id="run-cycle-budget" type="number" step="1" value="20"></label>
+    <label>Model <input id="run-model" type="text" value="manual"></label>
+    <button id="run-start-submit" type="button">Start run</button>
+    <label>End outcome (optional) <input id="run-end-outcome" type="text"></label>
+    <button id="run-end-submit" type="button">End run</button>
+    <div class="result" id="run-result"></div>
+    <div class="error" id="run-error"></div>
+  </section>
+
+  <section class="panel" id="target-lambda-panel">
+    <h2>Target &amp; lambda</h2>
+    <label>Target hex <input id="target-hex" type="text" value="#3366cc"></label>
+    <button id="target-submit" type="button">Set target</button>
+    <label>Lambda <input id="lambda-value" type="number" step="0.01" value="0.1"></label>
+    <button id="lambda-submit" type="button">Set lambda</button>
+    <div class="result" id="target-lambda-result"></div>
+    <div class="error" id="target-lambda-error"></div>
+  </section>
+
+  <section class="panel" id="patch-panel">
+    <h2>Measurement patch</h2>
+    <label>Center x <input id="patch-cx" type="number" step="0.01" min="0" max="1"></label>
+    <label>Center y <input id="patch-cy" type="number" step="0.01" min="0" max="1"></label>
+    <label>Size px <input id="patch-size" type="number" step="1" min="20"></label>
+    <button id="patch-submit" type="button">Set patch</button>
+    <div class="result" id="patch-result"></div>
+    <div class="error" id="patch-error"></div>
+  </section>
+
+  <section class="panel" id="pump-panel">
+    <h2>Manual dosing -- pump</h2>
+    <label>Channel
+      <select id="pump-channel">
+        <option value="A">A (dye)</option>
+        <option value="B">B (dye)</option>
+        <option value="D">D (drain)</option>
+        <option value="W">W (water)</option>
+      </select>
+    </label>
+    <label>ml <input id="pump-ml" type="number" step="0.1" value="5"></label>
+    <button id="pump-submit" type="button">Dose</button>
+    <div class="result" id="pump-result"></div>
+    <div class="error" id="pump-error"></div>
+  </section>
+
+  <section class="panel" id="cycle-panel">
+    <h2>Manual dosing -- cycle (demo)</h2>
+    <label>Dose A ml <input id="cycle-dose-a" type="number" step="0.1" value="2"></label>
+    <label>Dose B ml <input id="cycle-dose-b" type="number" step="0.1" value="2"></label>
+    <label>Rationale <input id="cycle-rationale" type="text"></label>
+    <label>Model id <input id="cycle-model-id" type="text"></label>
+    <label>Latency s <input id="cycle-latency" type="number" step="0.01"></label>
+    <button id="cycle-submit" type="button">Run cycle</button>
+    <div class="result" id="cycle-result"></div>
+    <div class="error" id="cycle-error"></div>
+  </section>
+
+  <section class="panel" id="disrupt-panel">
+    <h2>Disruptions</h2>
+    <label>Skew channel
+      <select id="skew-channel">
+        <option value="A">A (dye)</option>
+        <option value="B">B (dye)</option>
+        <option value="D">D (drain)</option>
+        <option value="W">W (water)</option>
+      </select>
+    </label>
+    <label>Skew factor <input id="skew-factor" type="number" step="0.01" value="1.1"></label>
+    <button id="skew-submit" type="button">Set skew</button>
+    <label>Blip ml_water <input id="blip-ml" type="number" step="0.1" value="5"></label>
+    <button id="blip-submit" type="button">Inject blip</button>
+    <div class="result" id="disrupt-result"></div>
+    <div class="error" id="disrupt-error"></div>
+  </section>
+
+  <section class="panel" id="staging-panel">
+    <h2>Staging (budget-trip recovery)</h2>
+    <label>Water remaining ml <input id="staging-water" type="number" step="0.1" value="6000"></label>
+    <label>Waste ml <input id="staging-waste" type="number" step="0.1" value="0"></label>
+    <button id="staging-submit" type="button">Declare staging</button>
+    <div class="result" id="staging-result"></div>
+    <div class="error" id="staging-error"></div>
+  </section>
+
+  <section class="panel" id="calibrate-panel">
+    <h2>Calibrate</h2>
+    <label>Channel
+      <select id="calibrate-channel">
+        <option value="A">A (dye)</option>
+        <option value="B">B (dye)</option>
+        <option value="D">D (drain)</option>
+        <option value="W">W (water)</option>
+      </select>
+    </label>
+    <label>Seconds <input id="calibrate-seconds" type="number" step="0.1" value="2"></label>
+    <button id="calibrate-submit" type="button">Run calibration</button>
+    <div class="result" id="calibrate-result"></div>
+    <div class="error" id="calibrate-error"></div>
+  </section>
+
+  <section class="panel" id="health-panel">
+    <h2>Health strip</h2>
+    <div class="health" id="health-fields"></div>
+    <div class="error" id="health-error"></div>
+  </section>
+
+</div>
+
+<script src="/static/common.js"></script>
+<script src="/static/operate.js"></script>
+</body>
+</html>

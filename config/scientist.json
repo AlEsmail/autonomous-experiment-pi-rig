@@ -1,0 +1,16 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "poll_idle_s": 5.0,
+  "poll_active_s": 2.0,
+  "request_timeout_s": 10.0,
+  "cycle_timeout_s": 900.0,
+  "llm_max_tokens": 50000,
+  "llm_retries": 2,
+  "dose_cap_hint_ml": 10.0,
+  "conv_delta_e": 3.0,
+  "conv_hold": 3,
+  "conv_epsilon": 0.5,
+  "conv_window": 5,
+  "conv_min_cycles": 5,
+  "_note": "Pre-gamut-sweep placeholder values; conv_* knobs must be tuned on gamut-sweep data."
+}

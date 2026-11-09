@@ -1,0 +1,19 @@
+# ABOUTME: systemd unit for rig-service on the Pi. Install: sudo cp to /etc/systemd/system/,
+# ABOUTME: then sudo systemctl daemon-reload && sudo systemctl enable --now rig-service.
+
+[Unit]
+Description=Pantone rig control service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=<user>
+WorkingDirectory=/home/<user>/pantone-rig
+Environment=PYTHONPATH=/home/<user>/pantone-rig/src
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/<user>/pantone-rig/.venv/bin/python -m rig_service
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
