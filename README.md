@@ -48,7 +48,3 @@ python -m venv .venv
 .venv/bin/pip install -e ".[dev]"      # Windows: .venv\Scripts\pip
 .venv/bin/python -m pytest
 ```
-
-## Results
-
-[Results: to be added by AL]
